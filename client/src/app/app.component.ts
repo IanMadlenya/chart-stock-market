@@ -41,6 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.stockForm = new FormGroup({'symbol': new FormControl('', Validators.required)});
     this.initWs();
+
     this.subscription = this.apiService.stocksChanged
       .subscribe(
         ((stocks: any[]) => {
