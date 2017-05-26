@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms'
 
 import { Subscription } from 'rxjs/Subscription';
-import { $WebSocket } from 'angular2-websocket/angular2-websocket'
+import { $WebSocket, WebSocketSendMode } from 'angular2-websocket/angular2-websocket'
 import { ApiService } from './api.service';
 import { environment as env } from '../environments/environment';
 
@@ -18,6 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ws: any;
   error: string = '';
   timeoutID: any;
+  wsIntervalId: any;
   loading: boolean = false;
 
   options: any = {
@@ -64,6 +65,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
     this.ws.close(true);
     this.onClearError();
+
+    if(this.wsIntervalId) {
+      clearInterval(this.wsIntervalId);
+    }
   }
 
   onStockAdd() {
@@ -92,11 +97,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private initWs() {
     this.ws = new $WebSocket(env.wsUrl);
 
-    this.ws.onClose(
-      () => {
-        console.log('WS closed by server!');
-      }
-    )
+    // https://devcenter.heroku.com/articles/websockets#timeouts
+    // keep connection open
+    this.wsIntervalId = setInterval(() => {
+      this.ws.send("ping", WebSocketSendMode.Direct);
+    }, 50000);
 
     this.ws.getDataStream().subscribe(
       (msg: MessageEvent) => {
