@@ -26,8 +26,8 @@ app.use(cors());
 app.use('/api', routes);
 
 const router = express.Router(); // eslint-disable-line new-cap
-app.use('/', express.static('client'));
-router.use('/*', (req, res) => res.sendFile('index.html', {root: 'client/'}));
+app.use('/', express.static('client/dist'));
+router.use('/*', (req, res) => res.sendFile('index.html', {root: 'client/dist'}));
 app.use(router);
 
 // if error is not an instanceOf APIError, convert it.
