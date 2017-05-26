@@ -92,6 +92,12 @@ export class AppComponent implements OnInit, OnDestroy {
   private initWs() {
     this.ws = new $WebSocket(env.wsUrl);
 
+    this.ws.onClose(
+      () => {
+        console.log('WS closed by server!');
+      }
+    )
+
     this.ws.getDataStream().subscribe(
       (msg: MessageEvent) => {
           const { action, symbol } = JSON.parse(msg.data);
