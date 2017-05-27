@@ -53,6 +53,16 @@ export class AppComponent implements OnInit, OnDestroy {
               valueDecimals: 2
             },
             data: s.data.map(d => [Date.parse(d[0]), d[1]]).reverse()
+            // data: s.data.reverse()
+            //         .reduce((acc, d) => {
+            //           return [
+            //             ...acc,
+            //             [+Date.parse(d[0]), d[1]],
+            //             [+Date.parse(d[0]) + 6 * 60 * 60 * 1000, d[2]],
+            //             [+Date.parse(d[0]) + 12 * 60 * 60 * 1000, d[3]],
+            //             [+Date.parse(d[0]) + 18 * 60 * 60 * 1000, d[4]]
+            //           ]
+            //         }, [])
           }));
 
           this.loader(false);
